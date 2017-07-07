@@ -29,10 +29,14 @@ const conditionsLookup = {
 
 const dayEmoji = emoji.get('sunrise')
 const nightEmoji = emoji.get('night_with_stars')
+const dayTimeLength = 1000 * 60 * 60 * 24
 
-fetch(wunderGroundUrl)
-  .then(response => response.json())
-  .then(parsedResponse => tweetWeather(parsedResponse))
+main () => {
+    fetch(wunderGroundUrl)
+      .then(response => response.json())
+      .then(parsedResponse => tweetWeather(parsedResponse))
+    setTimeout(main, dayTimeLength)
+}
 
 tweetWeather = (data) => {
   const dayConditions = data.forecast.txt_forecast.forecastday[0].icon
@@ -41,8 +45,8 @@ tweetWeather = (data) => {
   dayConditionEmoji = getEmojifiedCondition(dayConditions)
   nightConditionEmoji = getEmojifiedCondition(nightConditions.slice(3)) // night conditions are prefixed with "nt_"
 
-  tweet = dayEmoji + ' ' + dayConditionEmoji + '\n\n' +
-    nightEmoji + ' ' + nightConditionEmoji
+  tweet = dayEmoji + '  ' + dayConditionEmoji + '\n\n' +
+    nightEmoji + '  ' + nightConditionEmoji
 
   Twitter.post('statuses/update', {
     status: tweet
