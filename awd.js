@@ -45,7 +45,7 @@ tweetWeather = (data) => {
   dayConditionEmoji = getEmojifiedCondition(dayConditions)
   nightConditionEmoji = getEmojifiedCondition(nightConditions.slice(3)) // night conditions are prefixed with "nt_"
 
-  tweet = dayEmoji + '  ' + dayConditionEmoji + '\n\n' +
+  tweet = dayEmoji + '  ' + dayConditionEmoji + '\n' +
     nightEmoji + '  ' + nightConditionEmoji
 
   Twitter.post('statuses/update', {
