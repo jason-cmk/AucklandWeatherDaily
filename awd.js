@@ -51,7 +51,8 @@ tweetWeather = (data) => {
   Twitter.post('statuses/update', {
     status: tweet
   }, (err, data, response) => {
-    console.log(tweet)
+    console.log(response)
+    console.log(err)
   })
 }
 
