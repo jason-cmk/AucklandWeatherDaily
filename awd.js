@@ -31,11 +31,11 @@ const dayEmoji = emoji.get('sunrise')
 const nightEmoji = emoji.get('night_with_stars')
 const dayTimeLength = 1000 * 60 * 60 * 24
 
-main () => {
-    fetch(wunderGroundUrl)
-      .then(response => response.json())
-      .then(parsedResponse => tweetWeather(parsedResponse))
-    setTimeout(main, dayTimeLength)
+main = () => {
+  fetch(wunderGroundUrl)
+    .then(response => response.json())
+    .then(parsedResponse => tweetWeather(parsedResponse))
+  setTimeout(main, dayTimeLength)
 }
 
 tweetWeather = (data) => {
@@ -94,3 +94,5 @@ getEmojifiedCondition = (conditions) => {
   }
   return ' dunno mate ¯\\\_(ツ)_/¯'
 }
+
+main()
