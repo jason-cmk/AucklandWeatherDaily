@@ -3,7 +3,8 @@ const fetch = require('node-fetch')
 const twit = require('twit')
 const emoji = require('node-emoji')
 
-const Twitter = new twit(config.twitter);
+const Twitter = new twit(config.twitter)
+const CronJob = require('cron').CronJob
 
 // Wunderground info
 const wunderGroundQuery = '/forecast/q/NZ/Auckland.json'
@@ -27,18 +28,30 @@ const conditionsLookup = {
   chanceSleet: 'chancesleet'
 }
 
+const dayNames = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+]
+
 const dayEmoji = emoji.get('sunrise')
 const nightEmoji = emoji.get('night_with_stars')
-const dayTimeLength = 1000 * 60 * 60 * 24
+const dayTimeLength = 1000 * 60 * 60 * 24 - 1 // wait for 23:59:59 before polling again
 
-main = () => {
+function main() {
+  var today = new Date()
+
   fetch(wunderGroundUrl)
     .then(response => response.json())
-    .then(parsedResponse => tweetWeather(parsedResponse))
-  setTimeout(main, dayTimeLength)
+    .then(parsedResponse => tweetWeather(parsedResponse, today))
 }
 
-tweetWeather = (data) => {
+tweetWeather = (data, today) => {
   const dayConditions = data.forecast.txt_forecast.forecastday[0].icon
   const nightConditions = data.forecast.txt_forecast.forecastday[1].icon
 
@@ -46,14 +59,19 @@ tweetWeather = (data) => {
   nightConditionEmoji = getEmojifiedCondition(nightConditions.slice(3)) // night conditions are prefixed with "nt_"
 
   tweet = dayEmoji + '  ' + dayConditionEmoji + '\n' +
-    nightEmoji + '  ' + nightConditionEmoji
+    nightEmoji + '  ' + nightConditionEmoji + '\n\n' +
+    dayNames[today.getDay()]
 
   Twitter.post('statuses/update', {
     status: tweet
   }, (err, data, response) => {
+    console.log('###### RESPONSE')
     console.log(response)
+    console.log('###### ERRORS')
     console.log(err)
   })
+
+  console.log(tweet)
 }
 
 getEmojifiedCondition = (conditions) => {
@@ -93,7 +111,15 @@ getEmojifiedCondition = (conditions) => {
       return emoji.get('mostly_sunny')
       break
   }
-  return ' dunno mate ¯\\\_(ツ)_/¯'
+  return '¯\\\_(ツ)_/¯'
 }
 
-main()
+const cronJob = new CronJob(
+  '00 30 05 * * *',
+  main,
+  console.log('Job completed: ' + new Date()),
+  true)
+
+cronJob.start()
+
+console.log('job status', cronJob.running);
