@@ -111,7 +111,7 @@ getEmojifiedCondition = (conditions) => {
       return emoji.get('mostly_sunny')
       break
   }
-  return '¯\\\_(ツ)_/¯'
+  return '¯\\_(ツ)_/¯'
 }
 
 const cronJob = new CronJob(
