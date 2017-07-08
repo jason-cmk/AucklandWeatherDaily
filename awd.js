@@ -6,13 +6,13 @@ const emoji = require('node-emoji')
 const Twitter = new twit(config.twitter)
 const CronJob = require('cron').CronJob
 
-// Wunderground info
-const wunderGroundQuery = '/forecast/q/NZ/Auckland.json'
-const wunderGroundApiKey = config.wunderground.wunderGroundApiKey
-const wunderGroundUrl =
+// wunderground info
+const wundergroundQuery = '/forecast/q/NZ/Auckland.json'
+const wundergroundApiKey = config.wunderground.wundergroundApiKey
+const wundergroundUrl =
   'http://api.wunderground.com/api/' +
-  wunderGroundApiKey +
-  wunderGroundQuery
+  wundergroundApiKey +
+  wundergroundQuery
 
 const conditionsLookup = {
   clear: 'clear',
@@ -46,7 +46,7 @@ const dayTimeLength = 1000 * 60 * 60 * 24 - 1 // wait for 23:59:59 before pollin
 function main() {
   var today = new Date()
 
-  fetch(wunderGroundUrl)
+  fetch(wundergroundUrl)
     .then(response => response.json())
     .then(parsedResponse => tweetWeather(parsedResponse, today))
 }
