@@ -3,7 +3,7 @@ This is a twitter bot that tweets the weather for Auckland NZ every morning in t
 
 This twitter bot is most useful if you turn on notifications for it. That way, you just have to check your notifications to get all you need, then dismiss it. Like this:
 
-![notification](http://imgur.com/a/K3Aqc)
+![notification](http://i.imgur.com/sge3LLK.png)
 
 ## Powered by Weather Underground! 
 please visit https://www.wunderground.com/ ☁️
