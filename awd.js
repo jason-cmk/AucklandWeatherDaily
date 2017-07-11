@@ -41,34 +41,34 @@ const dayNames = [
 
 const dayEmoji = emoji.get('sunrise')
 const nightEmoji = emoji.get('night_with_stars')
-const dayTimeLength = 1000 * 60 * 60 * 24 - 1 // wait for 23:59:59 before polling again
 
 function main() {
-  var today = new Date()
-
   fetch(wundergroundUrl)
     .then(response => response.json())
-    .then(parsedResponse => tweetWeather(parsedResponse, today))
+    .then(parsedResponse => tweetWeather(parsedResponse))
 }
 
-tweetWeather = (data, today) => {
+tweetWeather = (data) => {
   const dayConditions = data.forecast.txt_forecast.forecastday[0].icon
   const nightConditions = data.forecast.txt_forecast.forecastday[1].icon
+  const today = new Date()
 
   dayConditionEmoji = getEmojifiedCondition(dayConditions)
   nightConditionEmoji = getEmojifiedCondition(nightConditions.slice(3)) // night conditions are prefixed with "nt_"
 
   tweet = dayEmoji + '  ' + dayConditionEmoji + '\n' +
     nightEmoji + '  ' + nightConditionEmoji + '\n\n' +
-    dayNames[today.getDay()]
+    dayNames[today.getDay() + 1] // NZ time is a day ahead of GMT
 
   Twitter.post('statuses/update', {
     status: tweet
   }, (err, data, response) => {
     console.log('###### RESPONSE')
     console.log(response)
-    console.log('###### ERRORS')
-    console.log(err)
+    if (err !== undefined) {
+      console.log('###### ERRORS')
+      console.log(err)
+    }
   })
 
   console.log(tweet)
@@ -121,5 +121,4 @@ const cronJob = new CronJob(
   true)
 
 cronJob.start()
-
-console.log('job status', cronJob.running);
+console.log('CronJob Status:', cronJob.running);
