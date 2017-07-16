@@ -40,7 +40,7 @@ const dayNames = [
 ]
 
 const dayEmoji = emoji.get('sunrise')
-const nightEmoji = emoji.get('night_with_stars')
+const nightEmoji = emoji.get('city_sunrise')
 
 function main() {
   fetch(wundergroundUrl)
