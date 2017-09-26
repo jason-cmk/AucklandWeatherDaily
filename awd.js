@@ -115,7 +115,7 @@ getEmojifiedCondition = (conditions) => {
 }
 
 const cronJob = new CronJob(
-  '00 30 17 * * *',
+  '00 30 16 * * *',
   main,
   console.log('Job completed: ' + new Date()),
   true)
